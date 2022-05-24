@@ -5,7 +5,7 @@ ENV LANG=en_US.UTF-8 IS_IN_CONTAINER=true
 RUN set -ex && \
     echo "---------- Update yum packages ----------" && \
     yum -y install passwd vim && \
-    yum -y install bind-utils openssh-clients telnet wget unzip less which sysstat net-tools iproute fontconfig mkfontscale && \
+    yum -y install bind-utils hostname openssh-clients telnet wget unzip less which sysstat net-tools iproute fontconfig mkfontscale && \
     echo "---------- add profile ----------" && \
     touch /etc/profile.d/custom.sh && \
     echo "alias ll='ls -lrtFh --color=auto'" >> /etc/profile.d/custom.sh && \
