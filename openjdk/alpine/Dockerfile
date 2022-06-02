@@ -1,14 +1,16 @@
-FROM openjdk:8u332-jdk-oraclelinux7
+FROM openjdk:8-jdk-alpine3.9
 
 ENV LANG=en_US.UTF-8 IS_IN_CONTAINER=true
 
 RUN set -ex && \
-    #添加常用工具
-    yum -y install passwd vim && \
-    yum -y install bind-utils hostname openssh-clients telnet wget unzip less which sysstat net-tools iproute fontconfig mkfontscale && \
+    #更改国内源
+    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
+    #添加shadow、vim、procps、curl、bash
+    apk update && apk add --no-cache shadow vim procps curl bash bash-doc bash-completion && \
     #修改时区
-    mv /etc/localtime /etc/localtime_bak && \
-    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+        && echo "Asia/Shanghai" > /etc/timezone \
+        && apk del tzdata && \
     #添加自定义配置
     touch /etc/profile.d/custom.sh && \
     echo "alias ll='ls -lrtFh --color=auto'" >> /etc/profile.d/custom.sh && \
@@ -17,6 +19,6 @@ RUN set -ex && \
     echo "WHITE=\"\e[1;37m\";GREEN=\"\e[1;32m\";YELLOW=\"\e[1;33m\";BLUE=\"\e[1;36m\";ORANGE_BG=\"\e[1;43m\";END=\"\e[m\";" >> /etc/profile.d/custom.sh && \
     echo "export PS1=\"\n\${WHITE}[container]\${END}\${GREEN}\u\${END}\${YELLOW}@\${END}\${BLUE}\h\${END}:\w\n\\$ \"" >> /etc/profile.d/custom.sh && \
     #删除临时文件
-    yum clean all && rm -rf /tmp/*
+    rm -rf /tmp/* && rm -rf /var/cache/apk/*
 
 CMD ["/bin/sh", "-l"]
