@@ -1,0 +1,37 @@
+{
+  "run_type": "server",
+  "local_addr": "::",
+  "local_port": 443,
+  "remote_addr": "nginx-service",
+  "remote_port": 80,
+  "log_level": 1,
+  "disable_http_check": true,
+  "udp_timeout": 60,
+  "password": [
+    "123456"
+  ],
+  "ssl": {
+    "cert": "/etc/trojan-go/fullchain.pem",
+    "key": "/etc/trojan-go/privkey.pem",
+    "sni": "test.xcloudapi.com",
+    "alpn": [
+      "http/1.1"
+    ],
+    "verify": true,
+    "verify_hostname": true,
+    "session_ticket": true,
+    "reuse_session": true,
+    "fallback_addr": "nginx-service",
+    "fallback_port": 80
+  },
+  "tcp": {
+    "no_delay": true,
+    "keep_alive": true,
+    "prefer_ipv4": false
+  },
+  "mux": {
+    "enabled": true,
+    "concurrency": 8,
+    "idle_timeout": 60
+  }
+}

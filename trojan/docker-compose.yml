@@ -1,0 +1,26 @@
+version: '3'
+services:
+  trojan:
+    image: trojangfw/trojan
+    restart: always
+    networks:
+      - trojan-network
+    depends_on:
+      - nginx-service
+    command: trojan /etc/trojan-go/config.json
+    ports:
+      - "8443:443"  #
+    volumes:
+      - ./config/trojan-server.json:/etc/trojan-go/config.json
+      - ./config/fullchain.pem:/etc/trojan-go/fullchain.pem
+      - ./config/privkey.pem:/etc/trojan-go/privkey.pem
+#      - /etc/letsencrypt/live/test.example.org/fullchain.pem:/etc/trojan-go/fullchain.pem
+#      - /etc/letsencrypt/live/test.example.org/privkey.pem:/etc/trojan-go/privkey.pem
+  nginx-service:
+    image: nginx:1.19.0-alpine
+    restart: always
+    networks:
+      - trojan-network
+networks:
+  trojan-network:
+    driver: bridge

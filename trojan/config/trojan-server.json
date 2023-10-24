@@ -1,0 +1,33 @@
+{
+  "run_type": "server",
+  "local_addr": "0.0.0.0",
+  "local_port": 443,
+  "remote_addr": "nginx-service",
+  "remote_port": 80,
+  "log_level": 1,
+  "password": [
+    "123456"
+  ],
+  "ssl": {
+    "cert": "/etc/trojan-go/fullchain.pem",
+    "key": "/etc/trojan-go/privkey.pem",
+    "sni": "test.example.com",
+    "alpn": [
+      "http/1.1"
+    ],
+    "verify": true,
+    "verify_hostname": true,
+    "cipher": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384",
+    "cipher_tls13": "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384",
+    "session_ticket": true,
+    "reuse_session": true,
+    "prefer_server_cipher": true
+  },
+  "tcp": {
+    "prefer_ipv4": false,
+    "fast_open": true,
+    "no_delay": true,
+    "keep_alive": true,
+    "reuse_port": true
+  }
+}
