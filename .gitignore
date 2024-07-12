@@ -1,2 +1,43 @@
 .idea/
 .vscode/
+
+# Logs
+logs
+*.log
+
+# Cache
+cache
+
+#store
+store
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs created by jacoco ant task
+jacoco_classes/
+
+# Compiled native code
+lib/
+*.so
+
+# Editors
+.idea/
+.project
+.classpath
+.settings/
+*.launch
+*.markers
+*.pyc
+*.pyo
+*.swp
+*~
+.DS_Store
+.idea/
+.project
+.classpath
+.settings/
+*.launch
