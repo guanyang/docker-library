@@ -25,7 +25,6 @@ lib/
 *.so
 
 # Editors
-.idea/
 .project
 .classpath
 .settings/
@@ -34,10 +33,4 @@ lib/
 *.pyc
 *.pyo
 *.swp
-*~
 .DS_Store
-.idea/
-.project
-.classpath
-.settings/
-*.launch
