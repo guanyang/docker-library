@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: apachepulsar/pulsar:latest
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=512m"
+    entrypoint: ["/pulsar/bin/pulsar", "standalone", "--zookeeper"]
+    ports:
+      - "2181:2181"
+    volumes:
+      - pulsar-data:/pulsar/data
+      - pulsar-logs:/pulsar/logs
+
+  bookie:
+    image: apachepulsar/pulsar:latest
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=512m"
+    entrypoint: ["/pulsar/bin/pulsar", "standalone", "--bookkeeper"]
+    depends_on:
+      - zookeeper
+    ports:
+      - "4181:4181"
+    volumes:
+      - pulsar-data:/pulsar/data
+      - pulsar-logs:/pulsar/logs
+
+  broker:
+    image: apachepulsar/pulsar:latest
+    environment:
+      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=512m"
+    entrypoint: ["/pulsar/bin/pulsar", "standalone", "--broker"]
+    depends_on:
+      - zookeeper
+      - bookie
+    ports:
+      - "18080:8080"
+    volumes:
+      - pulsar-data:/pulsar/data
+      - pulsar-logs:/pulsar/logs
+
+volumes:
+  pulsar-data:
+  pulsar-logs:
