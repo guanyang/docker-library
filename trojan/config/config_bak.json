@@ -1,0 +1,46 @@
+{
+    "run_type": "server",
+    "local_addr": "::",
+    "local_port": 8443,
+    "remote_addr": "127.0.0.1",
+    "remote_port": 80,
+    "password": [
+        "123456"
+    ],
+    "ssl": {
+        "cert": "/etc/trojan-go/tx.xcloudapi.com.pem",
+        "key": "/etc/trojan-go/tx.xcloudapi.com.key",
+        "sni": "tx.xcloudapi.com",
+        "alpn": [
+            "http/1.1"
+        ],
+        "session_ticket": true,
+        "reuse_session": true,
+        "fallback_addr": "127.0.0.1",
+        "fallback_port": 80
+    },
+    "tcp": {
+        "no_delay": true,
+        "keep_alive": true,
+        "prefer_ipv4": false
+    },
+    "mux": {
+        "enabled": false,
+        "concurrency": 8,
+        "idle_timeout": 60
+    },
+    "websocket": {
+        "enabled": false,
+        "path": "",
+        "host": "tx.xcloudapi.com"
+    },
+    "mysql": {
+      "enabled": true,
+      "server_addr": "127.0.0.1",
+      "server_port": 3306,
+      "database": "trojan_go",
+      "username": "root",
+      "password": "12345678",
+      "check_rate": 60
+    }
+}

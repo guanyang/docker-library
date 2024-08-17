@@ -34,3 +34,8 @@ lib/
 *.pyo
 *.swp
 .DS_Store
+
+#gz
+*.gz
+
+data/
