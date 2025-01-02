@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  skywalking-oap:
+    image: apache/skywalking-oap-server:latest
+    container_name: skywalking-oap
+    ports:
+      - "12800:12800" # OAP HTTP REST port
+      - "11800:11800" # OAP gRPC port
+    environment:
+      - SW_STORAGE=elasticsearch
+      - SW_STORAGE_ES_CLUSTER_NODES=elasticsearch:9200
+      - JAVA_OPTS=-Xms512M -Xmx512M
+      - SW_HEALTH_CHECKER=default
+      - SW_HEALTH_CHECKER_INTERVAL_SECONDS=5
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:12800" ]
+      interval: 15s
+      retries: 3
+#      start_period: 30s   # Delay before health check starts
+    depends_on:
+      elasticsearch:
+        condition: service_healthy  # Wait for Elasticsearch to be healthy
+
+  skywalking-ui:
+    image: apache/skywalking-ui:latest
+    container_name: skywalking-ui
+    ports:
+      - "18280:8080" # SkyWalking UI port
+    environment:
+      - SW_OAP_ADDRESS=http://skywalking-oap:12800
+#      - SW_HEALTH_CHECK_DISABLE=true
+#      - SW_HEALTH_CHECK_INTERVAL=3000
+#      - SW_HEALTH_CHECK_PATH=/
+#      - SW_HEALTH_CHECK_REQUEST_METHOD=GET
+#      - SW_HEALTH_CHECK_EXPECTED_STATUS=200
+#    command: ["java", "-Dskywalking.healthcheck.disable=true", "-jar", "webapp.jar"]
+    depends_on:
+      - skywalking-oap
+
+  elasticsearch:
+    image: bitnami/elasticsearch:8.5.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+    ports:
+      - "9200:9200" # Elasticsearch HTTP port
+      - "9300:9300" # Elasticsearch transport port
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+      interval: 15s
+      retries: 3
+    volumes:
+      - es_data:/bitnami/elasticsearch/data  # Persist data to a volume
+#    platform: linux/arm64  # For ARM architecture support
+
+volumes:
+  es_data:
+    driver: local
