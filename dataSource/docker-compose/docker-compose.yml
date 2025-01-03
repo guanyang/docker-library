@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: bitnami/mysql:latest
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345678   # 设置 MySQL root 密码
+      - MYSQL_USER=demo_user                        # 创建自定义用户
+      - MYSQL_PASSWORD=12345678       # 设置自定义用户密码
+      - MYSQL_DATABASE=demo                  # 创建默认数据库
+    ports:
+      - "3306:3306"                                # 映射 MySQL 端口
+    volumes:
+      - mysql_data:/bitnami/mysql                  # 数据持久化卷
+
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=12345678      # 设置 Redis 密码
+    ports:
+      - "6379:6379"                                # 映射 Redis 端口
+    volumes:
+      - redis_data:/bitnami/redis                  # 数据持久化卷
+
+volumes:
+  mysql_data:
+    driver: local                                  # 持久化卷，使用本地存储
+  redis_data:
+    driver: local
