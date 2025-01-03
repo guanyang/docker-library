@@ -13,6 +13,7 @@ services:
       - "3306:3306"                                # 映射 MySQL 端口
     volumes:
       - mysql_data:/bitnami/mysql                  # 数据持久化卷
+    restart: always
 
   redis:
     image: bitnami/redis:latest
@@ -23,6 +24,7 @@ services:
       - "6379:6379"                                # 映射 Redis 端口
     volumes:
       - redis_data:/bitnami/redis                  # 数据持久化卷
+    restart: always
 
 volumes:
   mysql_data:

@@ -20,7 +20,7 @@ version: "3"
 services:
   apisix-dashboard:
     image: apache/apisix-dashboard:3.0.0-alpine
-    restart: always
+#    restart: always
     volumes:
     - ./dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
     ports:
@@ -28,7 +28,7 @@ services:
 
   apisix:
     image: apache/apisix:${APISIX_IMAGE_TAG:-3.2.0-debian}
-    restart: always
+    restart: on-failure
     volumes:
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
     depends_on:
@@ -42,7 +42,7 @@ services:
 
   etcd:
     image: bitnami/etcd:3.4.15
-    restart: always
+#    restart: always
     volumes:
       - etcd_data:/bitnami/etcd
     environment:
@@ -55,7 +55,7 @@ services:
 
   web1:
     image: nginx
-    restart: always
+#    restart: always
     volumes:
       - ./upstream/web1.conf:/etc/nginx/nginx.conf
     ports:
@@ -65,7 +65,7 @@ services:
 
   web2:
     image: nginx
-    restart: always
+#    restart: always
     volumes:
       - ./upstream/web2.conf:/etc/nginx/nginx.conf
     ports:
@@ -75,7 +75,7 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.25.0
-    restart: always
+#    restart: always
     volumes:
       - ./prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
@@ -83,7 +83,7 @@ services:
 
   grafana:
     image: grafana/grafana:7.3.7
-    restart: always
+#    restart: always
     ports:
       - "3000:3000"
     volumes:
