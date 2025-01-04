@@ -80,6 +80,10 @@ services:
       - ./prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+  pushgateway:
+    image: prom/pushgateway:latest
+    ports:
+      - "19091:9091"
 
   grafana:
     image: grafana/grafana:7.3.7

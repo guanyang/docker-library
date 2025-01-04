@@ -18,12 +18,6 @@
 global:
   scrape_interval: 1s     # By default, scrape targets every 15 seconds.
 
-  # Attach these labels to any time series or alerts when communicating with
-  # external systems (federation, remote storage, Alertmanager).
-  external_labels:
-    stack: "apisix"
-
-
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
@@ -32,14 +26,8 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
     static_configs:
-      - targets: ["localhost:9090"]
-  - job_name: "apisix"
-    scrape_interval: 5s
-    metrics_path: "/apisix/prometheus/metrics"
-    static_configs:
-      - targets: ["apisix:9091"]
+      - targets: [ "localhost:9090" ]
   - job_name: "pushgateway"
     scrape_interval: 15s
     static_configs:
-      - targets: ["pushgateway:9091"]
-    metrics_path: /metrics
+      - targets: ["pushgateway:19091"]
