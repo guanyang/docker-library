@@ -1,0 +1,105 @@
+version: '2'
+services:
+  #Service for nameserver
+  namesrv:
+    image: apache/rocketmq:5.2.0
+    ports:
+      - "9876:9876"
+    environment:
+      - "HEAP_OPTS=-Xms512m -Xmx512m -Xmn256m"
+    volumes:
+      - ./prod/data/namesrv/logs:/home/rocketmq/logs
+      - ./scripts/runserver-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runserver.sh
+    command: sh mqnamesrv
+
+  #Service for broker
+  broker-a:
+    image: apache/rocketmq:5.2.0
+    ports:
+      - "11909:10909"
+      - "11911:10911"
+      - "11912:10912"
+#    mem_limit: 4g  # 限制内存使用为 2GB
+#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
+      - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+    volumes:
+      - ./prod/data/broker-a/logs:/home/rocketmq/logs
+      - ./prod/data/broker-a/store:/home/rocketmq/store
+      - ./prod/conf/broker-a.properties:/opt/rocketmq-5.2.0/conf/broker.conf
+      - ./scripts/runbroker-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runbroker.sh
+    command: sh mqbroker -c /opt/rocketmq-5.2.0/conf/broker.conf
+    depends_on:
+      - namesrv
+  broker-a-s:
+    image: apache/rocketmq:5.2.0
+    ports:
+      - "12909:10909"
+      - "12911:10911"
+      - "12912:10912"
+#    mem_limit: 4g  # 限制内存使用为 2GB
+#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
+      - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+    volumes:
+      - ./prod/data/broker-a-s/logs:/home/rocketmq/logs
+      - ./prod/data/broker-a-s/store:/home/rocketmq/store
+      - ./prod/conf/broker-a-s.properties:/opt/rocketmq-5.2.0/conf/broker.conf
+      - ./scripts/runbroker-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runbroker.sh
+    command: sh mqbroker -c /opt/rocketmq-5.2.0/conf/broker.conf
+    depends_on:
+      - namesrv
+  broker-b:
+    image: apache/rocketmq:5.2.0
+    ports:
+      - "13909:10909"
+      - "13911:10911"
+      - "13912:10912"
+#    mem_limit: 4g  # 限制内存使用为 2GB
+#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
+      - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+    volumes:
+      - ./prod/data/broker-b/logs:/home/rocketmq/logs
+      - ./prod/data/broker-b/store:/home/rocketmq/store
+      - ./prod/conf/broker-b.properties:/opt/rocketmq-5.2.0/conf/broker.conf
+      - ./scripts/runbroker-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runbroker.sh
+    command: sh mqbroker -c /opt/rocketmq-5.2.0/conf/broker.conf
+    depends_on:
+      - namesrv
+  broker-b-s:
+    image: apache/rocketmq:5.2.0
+    ports:
+      - "14909:10909"
+      - "14911:10911"
+      - "14912:10912"
+#    mem_limit: 4g  # 限制内存使用为 2GB
+#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
+      - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+    volumes:
+      - ./prod/data/broker-b-s/logs:/home/rocketmq/logs
+      - ./prod/data/broker-b-s/store:/home/rocketmq/store
+      - ./prod/conf/broker-b-s.properties:/opt/rocketmq-5.2.0/conf/broker.conf
+      - ./scripts/runbroker-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runbroker.sh
+    command: sh mqbroker -c /opt/rocketmq-5.2.0/conf/broker.conf
+    depends_on:
+      - namesrv
+
+  #Dashboard
+  dashboard:
+    image: apacherocketmq/rocketmq-dashboard:latest
+    ports:
+      - "8180:8080"
+    environment:
+      - "JAVA_OPTS=-Xms512m -Xmx512m -Xmn256m -Drocketmq.namesrv.addr=namesrv:9876"
+    depends_on:
+      - namesrv
+      - broker-a
+      - broker-a-s
+      - broker-b
+      - broker-b-s
