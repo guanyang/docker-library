@@ -5,6 +5,8 @@ services:
     image: apache/rocketmq:5.2.0
     ports:
       - "9876:9876"
+    mem_limit: 2g  # 限制内存使用
+    mem_reservation: 1g  # 保证容器至少使用
     environment:
       - "HEAP_OPTS=-Xms512m -Xmx512m -Xmn256m"
     volumes:
@@ -19,8 +21,8 @@ services:
       - "11909:10909"
       - "11911:10911"
       - "11912:10912"
-#    mem_limit: 4g  # 限制内存使用为 2GB
-#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    mem_limit: 2g  # 限制内存使用
+    mem_reservation: 1g  # 保证容器至少使用
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
@@ -38,8 +40,8 @@ services:
       - "12909:10909"
       - "12911:10911"
       - "12912:10912"
-#    mem_limit: 4g  # 限制内存使用为 2GB
-#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    mem_limit: 2g  # 限制内存使用
+    mem_reservation: 1g  # 保证容器至少使用
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
@@ -57,8 +59,8 @@ services:
       - "13909:10909"
       - "13911:10911"
       - "13912:10912"
-#    mem_limit: 4g  # 限制内存使用为 2GB
-#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    mem_limit: 2g  # 限制内存使用
+    mem_reservation: 1g  # 保证容器至少使用
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
@@ -76,8 +78,8 @@ services:
       - "14909:10909"
       - "14911:10911"
       - "14912:10912"
-#    mem_limit: 4g  # 限制内存使用为 2GB
-#    mem_reservation: 2g  # 保证容器至少使用 1GB
+    mem_limit: 2g  # 限制内存使用
+    mem_reservation: 1g  # 保证容器至少使用
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
@@ -95,6 +97,8 @@ services:
     image: apacherocketmq/rocketmq-dashboard:latest
     ports:
       - "8180:8080"
+    mem_limit: 2g  # 限制内存使用
+    mem_reservation: 1g  # 保证容器至少使用
     environment:
       - "JAVA_OPTS=-Xms512m -Xmx512m -Xmn256m -Drocketmq.namesrv.addr=namesrv:9876"
     depends_on:
