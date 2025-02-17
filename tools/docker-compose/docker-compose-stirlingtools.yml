@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+  stirling-pdf:
+    image: stirlingtools/stirling-pdf:latest
+    ports:
+      - '28080:8080'
+    volumes:
+      - stirling_trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - stirling_extraConfigs:/configs
+#      - stirling_customFiles:/customFiles/
+#      - stirling_logs:/logs/
+      - stirling_pipeline:/pipeline/
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
+      - LANGS=en_GB
+    platform: linux/arm64
+volumes:
+  stirling_trainingData:
+  stirling_extraConfigs:
+#  stirling_customFiles:
+#  stirling_logs:
+  stirling_pipeline:
