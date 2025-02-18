@@ -18,10 +18,13 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: 123456
     volumes:
-      - ~/mydata/pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
   swagger:
     image: swaggerapi/swagger-ui
     ports:
       - "8081:8080"
     environment:
       API_URL: http://127.0.0.1:3001
+volumes:
+  postgres_data:
+    driver: local                                  # 持久化卷，使用本地存储
