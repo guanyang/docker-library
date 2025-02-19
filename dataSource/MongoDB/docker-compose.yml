@@ -10,7 +10,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=123456  # 设置MongoDB的超级用户密码
       - MONGO_INITDB_DATABASE=demo  # 初始化时创建的数据库（可选）
     volumes:
-      - mongo_data:/data/db  # 数据持久化，确保数据库数据不会丢失
+      - mongo_data:/data/db  # 数据持久化
+      - mongo_config:/data/configdb
       - ./conf/init.js:/docker-entrypoint-initdb.d/init.js  # 挂载初始化脚本
     ports:
       - "27017:27017"  # 将MongoDB容器的27017端口映射到主机的27017端口
@@ -22,7 +23,7 @@ services:
     image: mongo-express:latest  # 使用最新的mongo-express镜像
 #    restart: always  # 同样设置为自动重启
     environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://root:123456@mongo:27017/demo  # 配置Mongo Express连接MongoDB
+      - ME_CONFIG_MONGODB_URL=mongodb://root:123456@mongo:27017/demo?ssl=false&authSource=admin  # 配置Mongo Express连接MongoDB
       - ME_CONFIG_BASICAUTH_USERNAME=admin  # 设置Mongo Express的基本认证用户名
       - ME_CONFIG_BASICAUTH_PASSWORD=admin  # 设置Mongo Express的基本认证密码
     ports:
@@ -33,6 +34,8 @@ services:
 volumes:
   mongo_data:  # 为MongoDB配置一个持久化数据卷
     driver: local  # 使用本地驱动程序来持久化数据
+  mongo_config:
+    driver: local
 
 networks:
   mongo_network:  # 定义网络，确保服务之间能互相通信
