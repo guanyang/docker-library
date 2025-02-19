@@ -10,7 +10,8 @@ services:
     environment:
       - "HEAP_OPTS=-Xms512m -Xmx512m -Xmn256m"
     volumes:
-      - ./data/namesrv/logs:/home/rocketmq/logs
+#      - ./data/namesrv/logs:/home/rocketmq/logs
+      - namesrv_data:/home/rocketmq
       - ./scripts/runserver-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runserver.sh
     command: sh mqnamesrv
 
@@ -27,8 +28,9 @@ services:
       - NAMESRV_ADDR=namesrv:9876
       - "HEAP_OPTS=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
     volumes:
-      - ./data/broker/logs:/home/rocketmq/logs
-      - ./data/broker/store:/home/rocketmq/store
+#      - ./data/broker/logs:/home/rocketmq/logs
+#      - ./data/broker/store:/home/rocketmq/store
+      - broker_data:/home/rocketmq
       - ./data/broker/conf/broker.conf:/opt/rocketmq-5.2.0/conf/broker.conf
       - ./scripts/runbroker-customize.sh:/home/rocketmq/rocketmq-5.2.0/bin/runbroker.sh
     command: sh mqbroker -c /opt/rocketmq-5.2.0/conf/broker.conf
@@ -47,3 +49,9 @@ services:
     depends_on:
       - namesrv
       - broker
+
+volumes:
+  namesrv_data:
+    driver: local
+  broker_data:
+    driver: local
