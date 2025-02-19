@@ -78,6 +78,7 @@ services:
 #    restart: always
     volumes:
       - ./prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     ports:
       - "9090:9090"
   pushgateway:
@@ -97,4 +98,6 @@ services:
 
 volumes:
   etcd_data:
+    driver: local
+  prometheus_data:
     driver: local
