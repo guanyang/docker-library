@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # MongoDB服务
+  mongo:
+    image: mongo:latest  # 使用最新版本的官方MongoDB镜像
+#    restart: always  # 确保容器自动重启，防止服务意外停止
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root  # 设置MongoDB的超级用户账号
+      - MONGO_INITDB_ROOT_PASSWORD=123456  # 设置MongoDB的超级用户密码
+      - MONGO_INITDB_DATABASE=demo  # 初始化时创建的数据库（可选）
+    volumes:
+      - mongo_data:/data/db  # 数据持久化，确保数据库数据不会丢失
+      - ./conf/init.js:/docker-entrypoint-initdb.d/init.js  # 挂载初始化脚本
+    ports:
+      - "27017:27017"  # 将MongoDB容器的27017端口映射到主机的27017端口
+    networks:
+      - mongo_network  # 为MongoDB容器指定网络，确保与其他服务在同一网络中
+
+  # 可选的Mongo Express（可视化管理MongoDB）
+  mongo-express:
+    image: mongo-express:latest  # 使用最新的mongo-express镜像
+#    restart: always  # 同样设置为自动重启
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://root:123456@mongo:27017/demo  # 配置Mongo Express连接MongoDB
+      - ME_CONFIG_BASICAUTH_USERNAME=admin  # 设置Mongo Express的基本认证用户名
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin  # 设置Mongo Express的基本认证密码
+    ports:
+      - "18081:8081"  # 将Mongo Express的8081端口映射到主机的8081端口
+    networks:
+      - mongo_network  # 确保Mongo Express与MongoDB在同一网络中
+
+volumes:
+  mongo_data:  # 为MongoDB配置一个持久化数据卷
+    driver: local  # 使用本地驱动程序来持久化数据
+
+networks:
+  mongo_network:  # 定义网络，确保服务之间能互相通信
+    driver: bridge  # 使用Docker的桥接网络驱动（默认设置）
