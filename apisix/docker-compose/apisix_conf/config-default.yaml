@@ -488,6 +488,7 @@ plugins:                          # plugin list (sorted by priority)
   # <- recommend to use priority (0, 100) for your custom plugins
   - example-plugin                 # priority: 0
   - fs-sign                        # priority: 50
+  - fs-multi-auth                     # priority: 49
   #- gm                            # priority: -43
   - aws-lambda                     # priority: -1899
   - azure-functions                # priority: -1900
