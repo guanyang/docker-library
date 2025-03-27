@@ -245,13 +245,22 @@ local function build_args_string(args,field_val)
     return canonical_string
 end
 
+
+-- 将字节数组转换为十六进制字符串
+local function to_hex(bytes)
+    return (bytes:gsub(".", function(c)
+        return string.format("%02x", string.byte(c))
+    end))
+end
+
 local function generate_signature(auth_conf, params)
     local query_string = params.query_string
     core.log.info("query_string: ", query_string)
 
     local algorithm = auth_conf["algorithm"]
     local secret_key = auth_conf["secret_key"]
-    local hex = hmac_funcs[algorithm](secret_key, query_string)
+    local result = hmac_funcs[algorithm](secret_key, query_string)
+    local hex = to_hex(result)
     return ngx_encode_base64(hex .. query_string)
 end
 
