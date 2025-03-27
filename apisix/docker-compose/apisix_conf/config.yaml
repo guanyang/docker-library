@@ -19,6 +19,8 @@ apisix:
   node_listen: 9080              # APISIX listening port
   enable_ipv6: false
 
+  extra_lua_path: /usr/local/apisix/custom/?.lua
+
   enable_control: true
   control:
     ip: "0.0.0.0"
