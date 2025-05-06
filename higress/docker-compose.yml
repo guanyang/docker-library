@@ -10,12 +10,12 @@ services:
       - "38001:8001" # Higress UI 控制台入口
       - "38080:8080" # 网关 HTTP 协议入口
       - "38443:8443" # 网关 HTTPS 协议入口
-  httpbin.dev:
-    image: kennethreitz/httpbin:latest
-    ports:
-      - "38180:80"  # 将容器的 80 端口映射到主机的 8080 端口
+#  httpbin.dev:
+#    image: kennethreitz/httpbin:latest
+#    ports:
+#      - "38180:80"  # 将容器的 80 端口映射到主机的 8080 端口
 
-  redis:
+  redis:    #引入了 Redis 来进行会话管理，确保所有的工具调用都可以关联到最初开启会话的 SSE 请求
     image: bitnami/redis:latest
     environment:
 #      - REDIS_PASSWORD=12345678      # 设置 Redis 密码
