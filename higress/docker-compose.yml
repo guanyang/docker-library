@@ -26,7 +26,7 @@ services:
       - redis_data:/bitnami/redis                  # 数据持久化卷
 
 volumes:
-  higress_data:  # 为MongoDB配置一个持久化数据卷
+  higress_data:  # 为higress配置一个持久化数据卷
     driver: local  # 使用本地驱动程序来持久化数据
   redis_data:
     driver: local
