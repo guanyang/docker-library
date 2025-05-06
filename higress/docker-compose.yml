@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  higress:
+    image: higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/all-in-one:latest
+    volumes:
+      - higress_data:/data  # 数据持久化
+      - ./configmaps/higress-config.yaml:/data/configmaps/higress-config.yaml
+    ports:
+      - "38001:8001" # Higress UI 控制台入口
+      - "38080:8080" # 网关 HTTP 协议入口
+      - "38443:8443" # 网关 HTTPS 协议入口
+  httpbin.dev:
+    image: kennethreitz/httpbin:latest
+    ports:
+      - "38180:80"  # 将容器的 80 端口映射到主机的 8080 端口
+
+  redis:
+    image: bitnami/redis:latest
+    environment:
+#      - REDIS_PASSWORD=12345678      # 设置 Redis 密码
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "36379:6379"                                # 映射 Redis 端口
+    volumes:
+      - redis_data:/bitnami/redis                  # 数据持久化卷
+
+volumes:
+  higress_data:  # 为MongoDB配置一个持久化数据卷
+    driver: local  # 使用本地驱动程序来持久化数据
+  redis_data:
+    driver: local

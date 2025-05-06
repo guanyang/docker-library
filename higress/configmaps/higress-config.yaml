@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: higress-config
+  namespace: higress-system
+  creationTimestamp: "2000-01-01T00:00:00Z"
+  resourceVersion: "1"
+data:
+  higress: |-
+    mcpServer:
+      sse_path_suffix: /sse  # SSE 连接的路径后缀
+      enable: true          # 启用 MCP Server
+      redis:
+        address: redis:6379 # Redis服务地址。这里需要使用本机的内网 IP，不可以使用 127.0.0.1
+        username: "" # Redis用户名（可选）
+        password: "" # Redis密码（可选）
+        db: 0 # Redis数据库（可选）
+      match_list:          # MCP Server 会话保持路由规则（当匹配下面路径时，将被识别为一个 MCP 会话，通过 SSE 等机制进行会话保持）
+        - match_rule_domain: "*"
+          match_rule_path: /user
+          match_rule_type: "prefix"
+        - match_rule_domain: "*"
+          match_rule_path: /mcp
+          match_rule_type: "prefix"
+      servers: []
+    downstream:
+      connectionBufferLimits: 32768
+      http2:
+        initialConnectionWindowSize: 1048576
+        initialStreamWindowSize: 65535
+        maxConcurrentStreams: 100
+      idleTimeout: 180
+      maxRequestHeadersKb: 60
+      routeTimeout: 0
+    upstream:
+      connectionBufferLimits: 10485760
+      idleTimeout: 10
