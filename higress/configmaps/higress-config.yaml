@@ -22,7 +22,13 @@ data:
         - match_rule_domain: "*"
           match_rule_path: /mcp
           match_rule_type: "prefix"
-      servers: []
+      servers: 
+        - name: mysql-mcp      # MCP Server 名称
+          path: /mcp/mysql     # 访问路径，需要与 match_list 中的配置匹配
+          type: database      # 类型为数据库
+          config:
+            dsn: "root:12345678@tcp(host.docker.internal:3306)/demo"
+            dbType: "mysql"
     downstream:
       connectionBufferLimits: 32768
       http2:
