@@ -24,6 +24,12 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     gd \
     opcache
 
+# 创建 Xdebug 日志文件并设置权限
+RUN mkdir -p /var/log \
+    && touch /var/log/xdebug.log \
+    && chown -R www-data:www-data /var/log/xdebug.log \
+    && chmod 755 /var/log/xdebug.log
+
 # 安装 Xdebug
 RUN pecl install xdebug-3.1.6 && docker-php-ext-enable xdebug
 
