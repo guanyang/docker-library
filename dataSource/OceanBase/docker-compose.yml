@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  oceanbase:
+    image: quay.io/oceanbase/oceanbase-ce
+    container_name: oceanbase-ce
+    environment:
+      - MODE=mini
+      - OB_TENANT_NAME=test           # OceanBase MySQL租户名称
+      - OB_TENANT_PASSWORD=123456     # OceanBase MySQL租户密码
+      - OB_SYS_PASSWORD=123456        # OceanBase sys租户root用户密码
+#      - OB_MEMORY_LIMIT=4G            # OceanBase集群memory_limit配置
+#      - OB_TENANT_MEMORY_SIZE=2G      # OceanBase租户memory_size配置
+#      - OB_TENANT_MIN_CPU=1           # OceanBase租户min_cpu配置
+#      - TZ=Asia/Shanghai
+    ports:
+      - "2881:2881"                                # 映射 MySQL 端口
+    volumes:
+      - oceanbase_data:/root/ob
+      - oceanbase_conf:/root/.obd/cluster
+#    restart: always
+
+volumes:
+  oceanbase_data:
+    driver: local
+  oceanbase_conf:
+    driver: local
