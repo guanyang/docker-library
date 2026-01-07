@@ -2,7 +2,7 @@ version: '2'
 services:
   #Service for nameserver
   namesrv:
-    image: apache/rocketmq:5.2.0
+    image: apache/rocketmq:5.3.4
     ports:
       - "9876:9876"
     mem_limit: 3g  # 限制内存使用
@@ -17,7 +17,7 @@ services:
 
   #Service for broker
   broker:
-    image: apache/rocketmq:5.2.0
+    image: apache/rocketmq:5.3.4
     ports:
       - "10909:10909"
       - "10911:10911"
@@ -39,9 +39,9 @@ services:
 
   #Dashboard
   dashboard:
-    image: apacherocketmq/rocketmq-dashboard:latest
+    image: apacherocketmq/rocketmq-dashboard:2.1.0
     ports:
-      - "8180:8080"
+      - "8082:8082"
     mem_limit: 2g  # 限制内存使用
     mem_reservation: 1g  # 保证容器至少使用
     environment:
