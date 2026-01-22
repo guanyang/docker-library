@@ -19,6 +19,11 @@ x-shared: &shared
     - QUEUE_BULL_REDIS_HOST=redis
     - QUEUE_HEALTH_CHECK_ACTIVE=true
     - N8N_ENCRYPTION_KEY=${ENCRYPTION_KEY}
+    - WEBHOOK_URL=${WEBHOOK_URL}
+    - N8N_EDITOR_BASE_URL=${N8N_EDITOR_BASE_URL}
+    - N8N_HOST=0.0.0.0
+    - N8N_PORT=5678
+    - N8N_PROTOCOL=http
   links:
     - postgres
     - redis
