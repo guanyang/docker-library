@@ -29,7 +29,7 @@ services:
 
   apisix:
     image: apache/apisix:${APISIX_IMAGE_TAG:-3.2.0-debian}
-    restart: on-failure
+#    restart: on-failure
     volumes:
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
       - ./apisix_conf/config-default.yaml:/usr/local/apisix/conf/config-default.yaml:ro
