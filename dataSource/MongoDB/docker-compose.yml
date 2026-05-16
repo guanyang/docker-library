@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # MongoDB服务
   mongo:
-    image: mongo:latest  # 使用最新版本的官方MongoDB镜像
+    image: mongo:8.2.9  # 使用最新版本的官方MongoDB镜像
 #    restart: always  # 确保容器自动重启，防止服务意外停止
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root  # 设置MongoDB的超级用户账号
@@ -20,7 +20,7 @@ services:
 
   # 可选的Mongo Express（可视化管理MongoDB）
   mongo-express:
-    image: mongo-express:latest  # 使用最新的mongo-express镜像
+    image: mongo-express:1.0.2-20-alpine3.19  # 使用最新的mongo-express镜像
 #    restart: always  # 同样设置为自动重启
     environment:
       - ME_CONFIG_MONGODB_URL=mongodb://root:123456@mongo:27017/demo?ssl=false&authSource=admin  # 配置Mongo Express连接MongoDB
