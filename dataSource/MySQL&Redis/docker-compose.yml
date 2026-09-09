@@ -5,6 +5,7 @@ services:
     image: bitnami/mysql:latest
     container_name: mysql
     environment:
+      - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=12345678   # 设置 MySQL root 密码
       - MYSQL_USER=demo_user                        # 创建自定义用户
       - MYSQL_PASSWORD=12345678       # 设置自定义用户密码
