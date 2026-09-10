@@ -39,3 +39,9 @@ lib/
 *.gz
 
 data/
+.env
+.env.*
+!.env.example
+# 本地备份
+backups/
+*.tar.gz

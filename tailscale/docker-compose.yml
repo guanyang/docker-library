@@ -1,0 +1,65 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale
+    hostname: "${TS_HOSTNAME:-3x-ui-vps}"
+    environment:
+      TS_AUTHKEY: "${TS_AUTHKEY:?TS_AUTHKEY must be set in .env}"
+      TS_HOSTNAME: "${TS_HOSTNAME:-3x-ui-vps}"
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_AUTH_ONCE: "true"
+      # 关键：尽量不用 userspace，让 100.x 进路由表
+      TS_USERSPACE: "false"
+      TS_ACCEPT_DNS: "true"
+    volumes:
+      - ./data/tailscale:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+    # 只向公网暴露 Xray 入站端口，不暴露 3X-UI 管理端口
+    ports:
+      # 仅允许本机访问3X-UI面板
+      - "127.0.0.1:${XUI_PANEL_PORT:-2053}:${XUI_PANEL_PORT:-2053}"
+
+      - "${XRAY_TCP_PORT:-443}:${XRAY_TCP_PORT:-443}/tcp"
+      - "${XRAY_UDP_PORT:-443}:${XRAY_UDP_PORT:-443}/udp"
+
+      # 如果需要让非 Tailscale 用户访问订阅服务，可取消注释
+      - "${XUI_SUB_PORT:-2096}:${XUI_SUB_PORT:-2096}/tcp"
+
+    restart: unless-stopped
+
+  3xui:
+    image: ghcr.io/mhsanaei/3x-ui:latest
+    container_name: 3xui
+
+    # 与 Tailscale 共享网络空间
+    network_mode: "service:tailscale"
+
+    depends_on:
+      - tailscale
+
+    environment:
+      XRAY_VMESS_AEAD_FORCED: "false"
+      XUI_ENABLE_FAIL2BAN: "true"
+      XUI_PORT: "${XUI_PANEL_PORT:-2053}"
+
+      # 仅首次创建数据库时生效
+      XUI_INIT_WEB_BASE_PATH: "${XUI_WEB_BASE_PATH:-/xui-admin}"
+      XUI_LOG_LEVEL: "info"
+
+    volumes:
+      - ./data/3x-ui/db:/etc/x-ui
+      - ./data/3x-ui/cert:/root/cert
+      - ./data/3x-ui/acme:/root/.acme.sh
+
+    # 3X-UI 内置 Fail2ban 执行 iptables 封禁需要这些权限
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+    tty: true
+    restart: unless-stopped
